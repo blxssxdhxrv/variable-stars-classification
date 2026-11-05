@@ -1,0 +1,23 @@
+# Данные и модели (генерируются заново)
+data/
+models/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# ОС
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
