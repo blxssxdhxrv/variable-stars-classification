@@ -36,3 +36,24 @@ def export_curve(path, measurements):
     finally:
         if temporary and os.path.exists(temporary):
             os.unlink(temporary)
+
+
+def load_exported_curve(path):
+    """Read measurements exported by this application's FITS pipeline."""
+    from starclass.core.photometry import Measurement
+
+    with Path(path).open(newline="", encoding="utf-8") as handle:
+        rows = [
+            Measurement(
+                time=float(row["time"]),
+                flux=float(row["flux"]),
+                error=float(row["error"]),
+                background=float(row["background"]),
+                x=float(row["x"]),
+                y=float(row["y"]),
+                quality=int(row["quality"]),
+                reason=row["reason"],
+            )
+            for row in csv.DictReader(handle)
+        ]
+    return sorted(rows, key=lambda row: row.time)

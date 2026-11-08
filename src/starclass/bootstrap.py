@@ -1,4 +1,5 @@
 import argparse
+import hashlib
 import json
 from functools import partial
 from pathlib import Path
@@ -8,7 +9,7 @@ from starclass.core.observations import Source
 from starclass.core.photometry import Aperture
 from starclass.infrastructure.fits import open_series
 from starclass.infrastructure.imaging import detect, measure, reference_image
-from starclass.infrastructure.persistence import export_curve
+from starclass.infrastructure.persistence import export_curve, load_exported_curve
 
 
 def main(argv=None):
@@ -37,6 +38,13 @@ def main(argv=None):
 
     def train_model(manifest, output, cancelled=None):
         def extract_row(parent, row):
+            if row.get("curve"):
+                curve = parent / row["curve"]
+                with curve.open("rb") as handle:
+                    actual = hashlib.file_digest(handle, "sha256").hexdigest()
+                if actual != row.get("curve_sha256"):
+                    raise ValueError(f"Контрольная сумма кривой не совпадает: {curve}")
+                return load_exported_curve(curve)
             path = parent / row["path"]
             _, _, sources = scan(path)
             return run(
