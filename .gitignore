@@ -21,3 +21,9 @@ Thumbs.db
 
 # Jupyter
 .ipynb_checkpoints/
+
+.ruff_cache/
+.pytest_cache/
+*.fits
+*.zip
+runs/

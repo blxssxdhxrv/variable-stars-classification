@@ -1,0 +1,11 @@
+name: Checks
+on: [push, pull_request]
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+      - run: uv sync --locked --python 3.12 --extra dev
+      - run: uv run --no-sync ruff check src/starclass tests
+      - run: uv run --no-sync pytest -q
