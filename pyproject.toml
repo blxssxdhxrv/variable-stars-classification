@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "starclass"
+version = "0.1.0"
+requires-python = ">=3.12,<3.14"
+dependencies = ["numpy", "scipy", "astropy", "photutils", "pandas", "scikit-learn", "joblib", "matplotlib"]
+
+[project.optional-dependencies]
+gui = ["PySide6"]
+dev = ["pytest", "ruff", "pytest-qt"]
+
+[project.scripts]
+starclass = "starclass.bootstrap:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["starclass*"]
